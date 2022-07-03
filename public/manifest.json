@@ -1,0 +1,8 @@
+{
+  "short_name": "Your Orders",
+  "name": "Your Orders",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
