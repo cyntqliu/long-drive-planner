@@ -14,7 +14,7 @@
  * @param traffic - boolean indicating if we want to consider traffic in route
  * @returns response from the directions api
  */
-async function getRouteForDisplay(stops : Array<{ [key : string] : any}>, traffic : boolean) {
+async function getRouteForDisplay(stops : Array<{ [key : string] : any}>, traffic : boolean = false) {
     // given the stops, extract the necessary information and make an api
     // request to get the route
     
@@ -30,7 +30,7 @@ async function getRouteForDisplay(stops : Array<{ [key : string] : any}>, traffi
         coordinates += (stop["center"][0].toString() + "," + stop["center"][1].toString() + ";")
     }
     coordinates = coordinates.substring(0, coordinates.length-1);
-    const settings = { "geometries" : "geojson" }
+    const settings = { "geometries" : "geojson", "steps" : "true" }
     const opt_params = overrideOptionalDefaults(DEFAULT_OPT_PARAMS, settings)
 
     const query = makeApiQueryURLJSON(

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Button } from '@mui/material';
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import ThreeDRotation from '@mui/icons-material/ThreeDRotation';
@@ -21,11 +21,12 @@ type LeftPanelProps = {
     onAdd: (index: number) => void;
     stops: {}[];
     searchResults: {}[];
-    onSearch: (query : string, label : string) => number;
-    onSearchStop: (stopType : string, percentThrough : number) => void;
+    onSearch: (query: string, label: string) => void;
+    onSearchStop: (stopType: string, percentThrough: number) => void;
+    routeResponse: { [key: string]: any } | undefined;
 }
 
-export default function LeftPanel({onAdd, searchResults, stops, onSearch, onSearchStop}: LeftPanelProps) {
+export default function LeftPanel({ onAdd, searchResults, stops, onSearch, onSearchStop, routeResponse }: LeftPanelProps) {
     const [page, setPage] = useState(0);
     const [selectedResult, setSelectedResult] = useState(1);
 
@@ -43,7 +44,7 @@ export default function LeftPanel({onAdd, searchResults, stops, onSearch, onSear
         if (page == 0) {
             return (
                 <div>
-                    <SearchAndRoute stops={stops} onSearch={onSearch} onSearchStop={onSearchStop} />
+                    <SearchAndRoute stops={stops} onSearch={onSearch} onSearchStop={onSearchStop} routeResponse={routeResponse} />
                     <Button variant="outlined" endIcon={<KeyboardArrowRightIcon />}
                         onClick={() => {
                             goRight();
@@ -62,7 +63,7 @@ export default function LeftPanel({onAdd, searchResults, stops, onSearch, onSear
                         }}
                     >Route and Search
                     </Button>
-                    {selectedResult < 0 ? <div></div> : 
+                    {selectedResult < 0 ? <div></div> :
                         <Button variant="outlined" endIcon={<KeyboardArrowRightIcon />}
                             onClick={() => {
                                 goRight();

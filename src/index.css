@@ -5,3 +5,14 @@
     height: 600px;
     width: 800px;
 }
+
+.directions-container {
+    flex: 1;
+    display: flex;
+    overflow: auto;
+}
+
+.directions {
+    display: flex;
+    min-height: min-content;
+}

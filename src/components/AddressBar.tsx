@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField';
  */
 type AddressBarProps = {
     addressLabel : string;
-    onSearch : (query : string, label : string) => number;
+    onSearch : (query : string, label : string) => void;
 }
 
 export default function AddressBar({addressLabel, onSearch}: AddressBarProps) {

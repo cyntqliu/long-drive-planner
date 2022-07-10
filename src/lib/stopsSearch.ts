@@ -1,5 +1,5 @@
 /**
- * Methods for interpreting and searching stop types
+ * Methods for interpreting, manipulating, and searching stop types
  */
 
 const GEOCODING_ENDPOINT = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
