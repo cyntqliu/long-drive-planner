@@ -26,7 +26,7 @@ export default function App() {
   const [num, setNum] = useState(0);
 
   return (
-    <Container maxWidth="lg">
+    <Container sx={{ height: '100%' }} maxWidth="xl">
       <Box sx={{ my: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           rtp.

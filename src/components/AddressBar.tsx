@@ -21,10 +21,10 @@ export default function AddressBar({addressLabel, onSearch}: AddressBarProps) {
 
     return (
         <Grid container spacing={1}>
-            <Grid item xs={2}>
+            <Grid item xs={2} p={1}>
                 {addressLabel}
             </Grid>
-            <Grid item xs={10}>
+            <Grid item xs={10} p={1}>
                 <TextField
                     onKeyUpCapture={handleSubmit}
                     id={addressLabel}

@@ -88,7 +88,7 @@ export default function Display() {
         <Box
             sx={{
             display: 'flex',
-            p: 3,
+            p: 4,
             border: "1px solid gray",
             width: '100%'
             }}

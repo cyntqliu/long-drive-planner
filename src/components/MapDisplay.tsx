@@ -115,8 +115,8 @@ export default function MapDisplay({stops, routeResponse} : MapDisplayProps) {
     }, [stops, routeResponse])
 
     return (
-        <div>
-            <div ref={mapContainer} className="map-container" />     
+        <div className="map-container">
+            <div ref={mapContainer} className="map-itself" />
         </div>
     )
 }

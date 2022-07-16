@@ -4,6 +4,7 @@ import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import ThreeDRotation from '@mui/icons-material/ThreeDRotation';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import '../index.css';
 
 import Results from './Results';
 import SearchAndRoute from './SearchAndRoute';
@@ -43,7 +44,7 @@ export default function LeftPanel({ onAdd, searchResults, stops, onSearch, onSea
     const getPage = () => {
         if (page == 0) {
             return (
-                <div>
+                <div className="left-panel">
                     <SearchAndRoute stops={stops} onSearch={onSearch} onSearchStop={onSearchStop} routeResponse={routeResponse} />
                     <Button variant="outlined" endIcon={<KeyboardArrowRightIcon />}
                         onClick={() => {
@@ -55,7 +56,7 @@ export default function LeftPanel({ onAdd, searchResults, stops, onSearch, onSea
             );
         } else if (page == 1) {
             return (
-                <div>
+                <div className="left-panel">
                     <Results onAdd={onAdd} searchResults={searchResults} />
                     <Button variant="outlined" startIcon={<KeyboardArrowLeftIcon />}
                         onClick={() => {
@@ -75,7 +76,7 @@ export default function LeftPanel({ onAdd, searchResults, stops, onSearch, onSea
             )
         } else {
             return (
-                <div>
+                <div className="left-panel">
                     <DetailedResult data={searchResults[selectedResult]} index={selectedResult} />
                     <Button variant="outlined" startIcon={<KeyboardArrowLeftIcon />}
                         onClick={() => {
