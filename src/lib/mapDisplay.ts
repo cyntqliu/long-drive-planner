@@ -7,6 +7,7 @@
  const DEFAULT_OPT_PARAMS = {
     "access_token": process.env.REACT_APP_API_KEY !== undefined ? process.env.REACT_APP_API_KEY : '',
 }
+const MAXZOOM = 17;
 
 /**
  * 
@@ -77,4 +78,50 @@ function convertStopsToMarker(stops : Array<{ [key : string] : any}>) {
     return geojson;
 }
 
-export {getRouteForDisplay, convertStopsToMarker};
+
+/**
+ * Determine the zoom level and center for map given route
+ * @param route - list of [long, lat] pairs representing the path
+ * @returns [float, float, float] - [zoom, longitude, latitude]
+ */
+function getMapZoomCenter(route : Array<Array<number>>) {
+    console.log(route);
+    if (route.length == 1) {
+        return [MAXZOOM, route[0][0], route[0][1]];
+    } else { // route.length > 2
+        let maxNorth = route[0][1];
+        let maxSouth = route[0][1];
+        let maxEast = route[0][0];
+        let maxWest = route[0][0];
+        for (let i = 1; i < route.length; i++) {
+            const coord = route[i]
+            if (coord[0] > maxEast) {
+                maxEast = coord[0]
+            } else if (coord[0] < maxWest) {
+                maxWest = coord[0]
+            }
+
+            if (coord[1] > maxNorth) {
+                maxNorth = coord[1]
+            } else if (coord[1] < maxSouth) {
+                maxSouth = coord[1]
+            }
+        }
+        const eastWest = Math.min(maxEast - maxWest, (180-maxEast) + (180+maxWest));
+        const northSouth = maxNorth - maxSouth;
+        const maxDistance = Math.max(eastWest, northSouth)
+        console.log(maxDistance);
+
+        if (maxDistance > 0) {
+            const zoom = Math.min(MAXZOOM, Math.log2(180/maxDistance));
+            const lngCenter = (maxEast + maxWest) / 2;
+            const latCenter = (maxNorth + maxSouth) / 2;
+            return [zoom, lngCenter, latCenter]
+        } else {
+            return [MAXZOOM, maxEast, maxNorth];
+        }
+    }
+}
+
+
+export {MAXZOOM, getRouteForDisplay, convertStopsToMarker, getMapZoomCenter};

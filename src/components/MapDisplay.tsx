@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mapboxgl from 'mapbox-gl';
-import { convertStopsToMarker } from '../lib/mapDisplay';
+import { convertStopsToMarker, getMapZoomCenter, MAXZOOM } from '../lib/mapDisplay';
 import '../index.css';
 
 
@@ -67,6 +67,10 @@ export default function MapDisplay({stops, routeResponse} : MapDisplayProps) {
         // ====================== display the route route
         if (routeResponse && (stops.length >= 2)) {
             const route = routeResponse.geometry.coordinates;
+            const [ newZoom, newLng, newLat ] = getMapZoomCenter(route)
+            setZoom(newZoom); setLng(newLng); setLat(newLat)
+            map.current!.setZoom(newZoom);
+            map.current!.setCenter([newLng, newLat]);
 
             if (map.current!.getSource('route')) {
                 (map.current!.getSource('route') as mapboxgl.GeoJSONSource).setData(
@@ -110,6 +114,14 @@ export default function MapDisplay({stops, routeResponse} : MapDisplayProps) {
             }
             if (map.current!.getSource(ROUTE_ID)) {
                 map.current!.removeSource(ROUTE_ID);
+            }
+            
+            if (stops.length == 1) {
+                const route = [markerData.features[0].geometry.coordinates];
+                const [ newZoom, newLng, newLat ] = getMapZoomCenter(route)
+                setZoom(newZoom); setLng(newLng); setLat(newLat)
+                map.current!.setZoom(newZoom);
+                map.current!.setCenter([newLng, newLat]);
             }
         }
     }, [stops, routeResponse])
