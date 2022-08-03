@@ -5,6 +5,7 @@ import LeftPanel from './LeftPanel';
 import MapDisplay from './MapDisplay';
 import { getEncodedAddress } from '../lib/addressSearch';
 import { getRouteForDisplay } from '../lib/mapDisplay';
+import { getStops, sortResultsByTimeAdded } from '../lib/stopsSearch';
 
 /**
  * The full display, including search/results/detailed results on the LeftPanel, and map widget on the right
@@ -34,8 +35,11 @@ export default function Display() {
         setStops(allButDest.concat(stops[-1]));
     }
 
-    const onSearchStop = (stopType : string, percentThrough : number) => {
+    const onSearchStop = async (stopType : string, percentThrough : number) => {
         // Conduct a stop search and update all the search results
+        const response = await getStops(stopType, percentThrough, routeResponse);
+        const bestStops = sortResultsByTimeAdded(response.features)
+        console.log(bestStops);
         setSearchResults([{"foo": "bar"}, {"foo": "go"}, {"foo": 3}])
     }
 

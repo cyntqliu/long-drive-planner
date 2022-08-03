@@ -8,6 +8,7 @@
     "access_token": process.env.REACT_APP_API_KEY !== undefined ? process.env.REACT_APP_API_KEY : '',
 }
 const MAXZOOM = 17;
+const AESTHETIC_ADJUSTMENT = 60;
 
 /**
  * 
@@ -85,7 +86,6 @@ function convertStopsToMarker(stops : Array<{ [key : string] : any}>) {
  * @returns [float, float, float] - [zoom, longitude, latitude]
  */
 function getMapZoomCenter(route : Array<Array<number>>) {
-    console.log(route);
     if (route.length == 1) {
         return [MAXZOOM, route[0][0], route[0][1]];
     } else { // route.length > 2
@@ -113,7 +113,9 @@ function getMapZoomCenter(route : Array<Array<number>>) {
         console.log(maxDistance);
 
         if (maxDistance > 0) {
-            const zoom = Math.min(MAXZOOM, Math.log2(180/maxDistance));
+            const zoom = Math.min(MAXZOOM, Math.log2(
+                (180 + AESTHETIC_ADJUSTMENT)/maxDistance)
+            );
             const lngCenter = (maxEast + maxWest) / 2;
             const latCenter = (maxNorth + maxSouth) / 2;
             return [zoom, lngCenter, latCenter]

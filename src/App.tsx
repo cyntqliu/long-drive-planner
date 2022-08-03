@@ -26,8 +26,8 @@ export default function App() {
   const [num, setNum] = useState(0);
 
   return (
-    <Container sx={{ height: '100%' }} maxWidth="xl">
-      <Box sx={{ my: 4 }}>
+    <Container maxWidth="xl">
+      <Box sx={{ border: 0, my: 4, height: 1 }} className="MuiBox-root">
         <Typography variant="h4" component="h1" gutterBottom>
           rtp.
         </Typography>

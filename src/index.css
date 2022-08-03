@@ -1,3 +1,7 @@
+.MuiBox-root {
+    height: 90vh;
+}
+
 .left-panel {
     display: flex;
     flex: 1;

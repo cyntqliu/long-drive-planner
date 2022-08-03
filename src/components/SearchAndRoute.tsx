@@ -20,7 +20,7 @@ export default function SearchAndRoute({stops, onSearch, onSearchStop, routeResp
         <Stack spacing={2}>
             <AddressBar addressLabel='Start' onSearch={onSearch} />
             <AddressBar addressLabel='End' onSearch={onSearch} />
-            <SearchStop onSearch={onSearchStop} disabled={stops.length < 2} />
+            <SearchStop onSearchStop={onSearchStop} disabled={stops.length < 2} />
             <Directions routeResponse={routeResponse} />
         </Stack>
     )
