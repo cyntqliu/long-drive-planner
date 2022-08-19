@@ -7,7 +7,7 @@ import '../index.css'
  * A single search result in Results
  */
 type SearchResultProps = {
-    onAdd: (index: number) => void;
+    onAdd: (index: number, percent: number) => void;
     data: {
         [key: string]: any
     };
@@ -41,7 +41,7 @@ export default function SearchResult({onAdd, data, index}: SearchResultProps) {
                     <div>{fullName}</div>
                 </Stack>
             </div>
-            <AddButton onClick={() => onAdd(index)}/>
+            <AddButton onClick={() => onAdd(index, data["percent"])}/>
         </Box>
     )
 }

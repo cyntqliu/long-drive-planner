@@ -6,6 +6,7 @@ import MapDisplay from './MapDisplay';
 import { getEncodedAddress } from '../lib/addressSearch';
 import { getRouteForDisplay } from '../lib/mapDisplay';
 import { getStops, sortResultsByTimeAdded } from '../lib/stopsSearch';
+import { sortedIndex } from '../lib/utils/localUtils';
 
 /**
  * The full display, including search/results/detailed results on the LeftPanel, and map widget on the right
@@ -28,20 +29,30 @@ export default function Display() {
     /**
      * Address and stop search functions. Results are passed into every child component
      */
-    const onAddStop = (index: number) => {
+    const onAddStop = async (index: number, percent: number) => {
         // Update list of stops when a stop is added
         // Asserts should never fail; we shouldn't let people add stops without a start and stop
         const selectedResult = searchResults[index];
         assert.notEqual(stops.length, 0);
         assert.notEqual(stops.length, 1);
 
-        const allButDest = stops.slice(0,-1).concat([selectedResult]);
-        setStops(allButDest.concat(stops.slice(-1)));
+        const insertIndex = sortedIndex(stopPercents, percent) + 1
+        const newStopPercents = stopPercents.slice(0, insertIndex).concat(percent);
+        setStopPercents(newStopPercents.concat(stopPercents.slice(insertIndex)));
+
+        const allButDest = stops.slice(0,insertIndex).concat([selectedResult]);
+        const newStops = allButDest.concat(stops.slice(insertIndex));
+        setStops(newStops);
+
+        const routeData = await getRouteForDisplay(newStops)
+            setRouteResponse(routeData.routes[0])
     }
 
     const onSearchStop = async (stopType : string, percentThrough : number) => {
         // Conduct a stop search and update all the search results
         const response = await getStops(stopType, percentThrough, routeResponse);
+        // manually set the percent
+        response["percent"] = percentThrough;
         const bestStops = sortResultsByTimeAdded(response.features)
         setSearchResults(bestStops)
     }

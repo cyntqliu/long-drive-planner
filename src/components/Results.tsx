@@ -5,7 +5,7 @@ import SearchResult from './SearchResult';
  * All search results (page 1 of left panel)
  */
 type ResultsProps = {
-    onAdd: (index: number) => void;
+    onAdd: (index: number, percent: number) => void;
     searchResults: {}[];
 }
 

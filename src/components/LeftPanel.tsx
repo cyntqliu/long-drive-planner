@@ -13,13 +13,13 @@ import DetailedResult from './DetailedResult';
 
 /**
  * Left panel of the display.
- * Page 0: search and address bars
- * Page 1: Search results
- * Page 2: Detailed result, if something is selected
+ * curPage 0: search and address bars
+ * curPage 1: Search results
+ * curPage 2: Detailed result, if something is selected
  */
 
 type LeftPanelProps = {
-    onAdd: (index: number) => void;
+    onAdd: (index: number, percent: number) => void;
     stops: {}[];
     searchResults: {}[];
     onSearch: (query: string, label: string) => void;
@@ -28,21 +28,21 @@ type LeftPanelProps = {
 }
 
 export default function LeftPanel({ onAdd, searchResults, stops, onSearch, onSearchStop, routeResponse }: LeftPanelProps) {
-    const [page, setPage] = useState(0);
+    const [curPage, setPage] = useState(0);
     const [selectedResult, setSelectedResult] = useState(1);
 
     const goLeft = () => {
-        setPage(page - 1);
+        setPage(curPage - 1);
     }
     const goRight = () => {
-        setPage(page + 1);
+        setPage(curPage + 1);
     }
     const onResultSelect = (index: number) => {
         setSelectedResult(index);
     }
 
     const getPage = () => {
-        if (page == 0) {
+        if (curPage == 0) {
             return (
                 <div className="left-panel">
                     <SearchAndRoute stops={stops} onSearch={onSearch} onSearchStop={onSearchStop} routeResponse={routeResponse} />
@@ -54,7 +54,7 @@ export default function LeftPanel({ onAdd, searchResults, stops, onSearch, onSea
                     </Button>
                 </div>
             );
-        } else if (page == 1) {
+        } else if (curPage == 1) {
             return (
                 <div className="left-panel">
                     <Results onAdd={onAdd} searchResults={searchResults} />
