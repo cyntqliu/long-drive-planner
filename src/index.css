@@ -31,3 +31,7 @@
     display: flex;
     min-height: min-content;
 }
+
+.fittedBox {
+    height: auto;
+}

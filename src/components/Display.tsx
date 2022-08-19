@@ -17,9 +17,13 @@ export default function Display() {
     const initialStops : {}[] = [];
     const [stops, setStops] = useState(initialStops);
 
+    const initialStopPercents : number[] = [];
+    const [stopPercents, setStopPercents] = useState(initialStopPercents)
+
     const [routeResponse, setRouteResponse] = useState<{[key : string] : any} | undefined>(undefined);
 
-    const [searchResults, setSearchResults] = useState([{"foo": "bar"}, {"foo": "go"}, {"foo": 2}])
+    const initSearchResults : {}[] = [];
+    const [searchResults, setSearchResults] = useState(initSearchResults)
     
     /**
      * Address and stop search functions. Results are passed into every child component
@@ -32,15 +36,14 @@ export default function Display() {
         assert.notEqual(stops.length, 1);
 
         const allButDest = stops.slice(0,-1).concat([selectedResult]);
-        setStops(allButDest.concat(stops[-1]));
+        setStops(allButDest.concat(stops.slice(-1)));
     }
 
     const onSearchStop = async (stopType : string, percentThrough : number) => {
         // Conduct a stop search and update all the search results
         const response = await getStops(stopType, percentThrough, routeResponse);
         const bestStops = sortResultsByTimeAdded(response.features)
-        console.log(bestStops);
-        setSearchResults([{"foo": "bar"}, {"foo": "go"}, {"foo": 3}])
+        setSearchResults(bestStops)
     }
 
     const onSearch = async (addressQuery : string, addressLabel : string) => {

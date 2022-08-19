@@ -27,7 +27,7 @@ export default function App() {
 
   return (
     <Container maxWidth="xl">
-      <Box sx={{ border: 0, my: 4, height: 1 }} className="MuiBox-root">
+      <Box sx={{ border: 0, my: 4, height: 1 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           rtp.
         </Typography>
