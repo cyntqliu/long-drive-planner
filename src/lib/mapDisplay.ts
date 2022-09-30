@@ -81,20 +81,29 @@ function convertStopsToMarker(stops : Array<{ [key : string] : any}>) {
 
 
 /**
- * Determine the zoom level and center for map given route
+ * Determine the zoom level and center for map given route and
+ * any stop search results
  * @param route - list of [long, lat] pairs representing the path
+ * @param searchedStops - list of [long, lat] pairs representing any
+ *  searchr results
  * @returns [float, float, float] - [zoom, longitude, latitude]
  */
-function getMapZoomCenter(route : Array<Array<number>>) {
-    if (route.length == 1) {
-        return [MAXZOOM, route[0][0], route[0][1]];
-    } else { // route.length > 2
-        let maxNorth = route[0][1];
-        let maxSouth = route[0][1];
-        let maxEast = route[0][0];
-        let maxWest = route[0][0];
-        for (let i = 1; i < route.length; i++) {
-            const coord = route[i]
+function getMapZoomCenter(
+    route : Array<Array<number>>, searchedStops : Array<Array<number>>
+) {
+    const allMarkers = route.concat(searchedStops)
+    if (allMarkers.length == 0) {
+        return [9, -70.9, 42.35]
+    }
+    if (allMarkers.length == 1) {
+        return [MAXZOOM, allMarkers[0][0], allMarkers[0][1]];
+    } else { // allMarkers.length >= 2
+        let maxNorth = allMarkers[0][1];
+        let maxSouth = allMarkers[0][1];
+        let maxEast = allMarkers[0][0];
+        let maxWest = allMarkers[0][0];
+        for (let i = 1; i < allMarkers.length; i++) {
+            const coord = allMarkers[i]
             if (coord[0] > maxEast) {
                 maxEast = coord[0]
             } else if (coord[0] < maxWest) {

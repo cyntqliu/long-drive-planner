@@ -20,6 +20,7 @@ function sortResultsByTimeAdded(results : {}[]) {
 }
 
 /**
+ * get stops of type stopType, progress percent of the way through route
  * 
  * @param stopType - string indicating type of stop desired (e.g. food, gas)
  * @param progress - percent of way through route 

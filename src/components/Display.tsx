@@ -14,6 +14,8 @@ import { sortedIndex } from '../lib/utils/localUtils';
 export default function Display() {
     const [hasStart, setHasStart] = useState(false);
     const [hasEnd, setHasEnd] = useState(false);
+    const [startQuery, setStartQuery] = useState("");
+    const [endQuery, setEndQuery] = useState("");
 
     const initialStops : {}[] = [];
     const [stops, setStops] = useState(initialStops);
@@ -27,7 +29,10 @@ export default function Display() {
     const [searchResults, setSearchResults] = useState(initSearchResults)
     
     /**
-     * Address and stop search functions. Results are passed into every child component
+     * Add a searched stop to stops
+     * 
+     * @param index - index of the selected stop from the searched results
+     * @param percent - percent of the way through trip selected stop is
      */
     const onAddStop = async (index: number, percent: number) => {
         // Update list of stops when a stop is added
@@ -46,8 +51,15 @@ export default function Display() {
 
         const routeData = await getRouteForDisplay(newStops)
             setRouteResponse(routeData.routes[0])
+        setSearchResults(initSearchResults) // clear the search results
     }
 
+    /**
+     * Stop search function. Sets search results to query results
+     * 
+     * @param stopType - type of stop requested (e.g. food, hotel)
+     * @param percentThrough - percent of way through trip (integer percent)
+     */
     const onSearchStop = async (stopType : string, percentThrough : number) => {
         // Conduct a stop search and update all the search results
         const response = await getStops(stopType, percentThrough, routeResponse);
@@ -57,11 +69,18 @@ export default function Display() {
         setSearchResults(bestStops)
     }
 
+    /**
+     * Address search function. Modifies stops to reflect new start or end
+     * 
+     * @param addressQuery - text input of the address search box
+     * @param addressLabel - label of the address search box (either 'Start'
+     *      or 'End')
+     */
     const onSearch = async (addressQuery : string, addressLabel : string) => {
         const response = await getEncodedAddress(addressQuery);
         var newStops : {}[];
 
-        if (addressLabel == 'Start') {  
+        if (addressLabel == 'Start') {
             const stopData = response.features[0];
             if (hasStart) { // override the old start
                 // TODO: ask the user whether they want to wipe all of their
@@ -70,6 +89,7 @@ export default function Display() {
                     // we no longer have a start
                     newStops = stops.slice(1)
                     setHasStart(false);
+                    setSearchResults(initSearchResults);
                 } else {
                     newStops = [stopData].concat(stops.slice(1))
                 }
@@ -78,6 +98,8 @@ export default function Display() {
                 setHasStart(true);
             }
             setStops(newStops);
+            // remember to maintain the contents of the textbox
+            setStartQuery(addressQuery);
         } else { // Addresslabel is end
             const stopData = response.features[0];
             if (hasEnd) { // override the old end
@@ -87,6 +109,7 @@ export default function Display() {
                     // we no longer have an end
                     newStops = stops.slice(0, -1)
                     setHasEnd(false);
+                    setSearchResults(initSearchResults);
                 } else {
                     newStops = stops.slice(0,-1).concat([stopData])
                 }
@@ -95,6 +118,8 @@ export default function Display() {
                 setHasEnd(true);
             }
             setStops(newStops);
+            // remember to maintain the contents of the textbox
+            setEndQuery(addressQuery);
         }
         if (newStops.length >= 2) {
             const routeData = await getRouteForDisplay(newStops)
@@ -119,7 +144,11 @@ export default function Display() {
                 onSearchStop={onSearchStop}
                 routeResponse={routeResponse}
             />
-            <MapDisplay stops={stops} routeResponse={routeResponse} />
+            <MapDisplay 
+                stops={stops}
+                routeResponse={routeResponse}
+                searchResults={searchResults}
+            />
         </Box>
     )
 }
