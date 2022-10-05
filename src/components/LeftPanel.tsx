@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import ThreeDRotation from '@mui/icons-material/ThreeDRotation';
@@ -25,24 +25,22 @@ type LeftPanelProps = {
     onSearch: (query: string, label: string) => void;
     onSearchStop: (stopType: string, percentThrough: number) => void;
     routeResponse: { [key: string]: any } | undefined;
+    page: number;
+    goLeft: () => void;
+    goRight: () => void;
+
 }
 
-export default function LeftPanel({ onAdd, searchResults, stops, onSearch, onSearchStop, routeResponse }: LeftPanelProps) {
-    const [curPage, setPage] = useState(0);
+export default function LeftPanel({ 
+    onAdd, searchResults, stops, onSearch, onSearchStop, routeResponse, page, goLeft, goRight
+}: LeftPanelProps) {
     const [selectedResult, setSelectedResult] = useState(1);
-
-    const goLeft = () => {
-        setPage(curPage - 1);
-    }
-    const goRight = () => {
-        setPage(curPage + 1);
-    }
     const onResultSelect = (index: number) => {
         setSelectedResult(index);
     }
 
     const getPage = () => {
-        if (curPage == 0) {
+        if (page == 0) {
             return (
                 <div className="left-panel">
                     <SearchAndRoute stops={stops} onSearch={onSearch} onSearchStop={onSearchStop} routeResponse={routeResponse} />
@@ -54,7 +52,7 @@ export default function LeftPanel({ onAdd, searchResults, stops, onSearch, onSea
                     </Button>
                 </div>
             );
-        } else if (curPage == 1) {
+        } else if (page == 1) {
             return (
                 <div className="left-panel">
                     <Results onAdd={onAdd} searchResults={searchResults} />

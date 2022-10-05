@@ -16,6 +16,7 @@ export default function Display() {
     const [hasEnd, setHasEnd] = useState(false);
     const [startQuery, setStartQuery] = useState("");
     const [endQuery, setEndQuery] = useState("");
+    const [leftPanelPage, setLeftPanelPage] = useState(0);
 
     const initialStops : {}[] = [];
     const [stops, setStops] = useState(initialStops);
@@ -52,6 +53,7 @@ export default function Display() {
         const routeData = await getRouteForDisplay(newStops)
             setRouteResponse(routeData.routes[0])
         setSearchResults(initSearchResults) // clear the search results
+        setLeftPanelPage(0) // automatically turn back to directions and route
     }
 
     /**
@@ -67,6 +69,7 @@ export default function Display() {
         response["percent"] = percentThrough;
         const bestStops = sortResultsByTimeAdded(response.features)
         setSearchResults(bestStops)
+        setLeftPanelPage(1) // automatically switch to the search results
     }
 
     /**
@@ -127,6 +130,16 @@ export default function Display() {
         }
     }
 
+    /**
+     * Functions for handling page turning for left panel
+     */
+    const goLeft = () => {
+        setLeftPanelPage(leftPanelPage - 1);
+    }
+    const goRight = () => {
+        setLeftPanelPage(leftPanelPage + 1);
+    }
+
     return (
         <Box
             sx={{
@@ -143,6 +156,9 @@ export default function Display() {
                 onSearch={onSearch}
                 onSearchStop={onSearchStop}
                 routeResponse={routeResponse}
+                page={leftPanelPage}
+                goLeft={goLeft}
+                goRight={goRight}
             />
             <MapDisplay 
                 stops={stops}

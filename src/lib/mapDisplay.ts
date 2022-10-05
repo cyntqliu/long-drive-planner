@@ -93,7 +93,7 @@ function getMapZoomCenter(
 ) {
     const allMarkers = route.concat(searchedStops)
     if (allMarkers.length == 0) {
-        return [9, -70.9, 42.35]
+        return [-1, 0, 0]
     }
     if (allMarkers.length == 1) {
         return [MAXZOOM, allMarkers[0][0], allMarkers[0][1]];
