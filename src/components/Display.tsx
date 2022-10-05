@@ -149,11 +149,13 @@ export default function Display() {
             width: '100%'
             }}
         >
-            <LeftPanel 
+            <LeftPanel
+                onSearch={onSearch}
                 onAdd={onAddStop}
+                startQuery={startQuery}
+                endQuery={endQuery}
                 searchResults={searchResults}
                 stops={stops}
-                onSearch={onSearch}
                 onSearchStop={onSearchStop}
                 routeResponse={routeResponse}
                 page={leftPanelPage}

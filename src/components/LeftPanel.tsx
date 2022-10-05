@@ -19,20 +19,23 @@ import DetailedResult from './DetailedResult';
  */
 
 type LeftPanelProps = {
-    onAdd: (index: number, percent: number) => void;
-    stops: {}[];
-    searchResults: {}[];
-    onSearch: (query: string, label: string) => void;
-    onSearchStop: (stopType: string, percentThrough: number) => void;
-    routeResponse: { [key: string]: any } | undefined;
-    page: number;
-    goLeft: () => void;
-    goRight: () => void;
+    onSearch: (query: string, label: string) => void; // handler for searching start or end
+    onAdd: (index: number, percent: number) => void; // handler for adding addresses
+    startQuery: string;
+    endQuery: string;
+    stops: {}[]; // current stops in route
+    searchResults: {}[]; // current stop search results
+    onSearchStop: (stopType: string, percentThrough: number) => void; // handler for searching stops
+    routeResponse: { [key: string]: any } | undefined; // json containing route
+    page: number; // page of LeftPanel
+    goLeft: () => void; // handler for turning LeftPanel left
+    goRight: () => void; // handler for turning LeftPanel right
 
 }
 
 export default function LeftPanel({ 
-    onAdd, searchResults, stops, onSearch, onSearchStop, routeResponse, page, goLeft, goRight
+    onSearch, onAdd, startQuery, endQuery, searchResults, stops, 
+    onSearchStop, routeResponse, page, goLeft, goRight
 }: LeftPanelProps) {
     const [selectedResult, setSelectedResult] = useState(1);
     const onResultSelect = (index: number) => {
@@ -43,7 +46,14 @@ export default function LeftPanel({
         if (page == 0) {
             return (
                 <div className="left-panel">
-                    <SearchAndRoute stops={stops} onSearch={onSearch} onSearchStop={onSearchStop} routeResponse={routeResponse} />
+                    <SearchAndRoute 
+                        stops={stops}
+                        startQuery={startQuery}
+                        endQuery={endQuery}
+                        onSearch={onSearch}
+                        onSearchStop={onSearchStop}
+                        routeResponse={routeResponse}
+                    />
                     <Button variant="outlined" endIcon={<KeyboardArrowRightIcon />}
                         onClick={() => {
                             goRight();

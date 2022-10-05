@@ -7,16 +7,15 @@ import TextField from '@mui/material/TextField';
  */
 type AddressBarProps = {
     addressLabel : string;
+    addressContent : string;
     onSearch : (query : string, label : string) => void;
 }
 
-export default function AddressBar({addressLabel, onSearch}: AddressBarProps) {
-    const [address, setAddress] = useState('');
+export default function AddressBar({addressLabel, addressContent, onSearch}: AddressBarProps) {
     const handleSubmit = (event: React.KeyboardEvent) => {
         if (event.key === "Enter") {
             onSearch((event.target as HTMLTextAreaElement).value, addressLabel);
         }
-        setAddress((event.target as HTMLTextAreaElement).value);
     };
 
     return (
@@ -28,6 +27,7 @@ export default function AddressBar({addressLabel, onSearch}: AddressBarProps) {
                 <TextField
                     onKeyUpCapture={handleSubmit}
                     id={addressLabel}
+                    defaultValue={addressContent}
                     variant="outlined"
                 />
             </Grid>
