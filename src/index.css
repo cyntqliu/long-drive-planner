@@ -4,8 +4,15 @@
 
 .left-panel {
     display: flex;
+    height: auto;
+    width: auto;
     flex: 1;
     flex-direction: column;
+}
+
+.left-panel-contents {
+    height: 95%;
+    width: 100%
 }
 
 .map-container {
@@ -24,12 +31,14 @@
 .directions-container {
     flex: 1;
     display: flex;
-    overflow: auto;
+    overflow-y: scroll;
+    height: auto;
+    width: auto;
 }
 
 .directions {
-    display: flex;
-    min-height: min-content;
+    height: 100%;
+    width: 100%
 }
 
 .fittedBox {

@@ -51,7 +51,7 @@ export default function Display() {
         setStops(newStops);
 
         const routeData = await getRouteForDisplay(newStops)
-            setRouteResponse(routeData.routes[0])
+        setRouteResponse(routeData.routes[0])
         setSearchResults(initSearchResults) // clear the search results
         setLeftPanelPage(0) // automatically turn back to directions and route
     }

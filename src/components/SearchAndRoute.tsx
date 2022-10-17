@@ -3,6 +3,7 @@ import { Stack } from '@mui/material';
 import AddressBar from './AddressBar';
 import SearchStop from './SearchStop';
 import Directions from './Directions';
+import '../index.css'
 
 /** 
  * Address bars for start, end, and stops; contains section for searching for more stops
@@ -21,7 +22,7 @@ export default function SearchAndRoute({
 }: SearchAndRouteProps) {
 
     return (
-        <Stack spacing={2}>
+        <Stack spacing={2} className="left-panel-contents">
             <AddressBar addressLabel='Start' addressContent={startQuery} onSearch={onSearch} />
             <AddressBar addressLabel='End' addressContent={endQuery} onSearch={onSearch} />
             <SearchStop onSearchStop={onSearchStop} disabled={stops.length < 2} />

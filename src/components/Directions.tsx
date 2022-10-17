@@ -12,12 +12,15 @@ type DirectionsProps = {
 export default function Directions({routeResponse} : DirectionsProps) {
     const extractDirections = () => {
         if (routeResponse) {
-            const steps = routeResponse.legs[0].steps;
-            console.log(steps)
+            const legs : {[key : string] : any}[] = routeResponse.legs // list of dicts with "steps"
+            var allSteps : {}[] = [];
+            for (const leg of legs) {
+                allSteps = allSteps.concat(leg.steps)
+            }
 
             return (
-                <div id="direction-text">
-                    {steps.map((step:any) => (<li>{step.maneuver.instruction}</li>))}
+                <div id="direction-text" className="directions">
+                    {allSteps.map((step:any) => (<li>{step.maneuver.instruction}</li>))}
                 </div>
             )
         } else {
@@ -27,9 +30,7 @@ export default function Directions({routeResponse} : DirectionsProps) {
 
     return (
         <div className="directions-container">
-            <div className="directions">
-                {extractDirections()}
-            </div>
+            {extractDirections()}
         </div>
     )
 }
