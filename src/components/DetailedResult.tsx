@@ -16,7 +16,7 @@ export default function DetailedResult({data, index}: DetailedResultProps) {
     const [placeName, setPlaceName] = useState(data["foo"]);
 
     return (
-        <div>
+        <div className="left-panel-contents">
             {placeName}: {index}
             <Button variant="contained">Heg</Button>
         </div>

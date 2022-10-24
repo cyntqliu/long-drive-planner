@@ -26,13 +26,13 @@ export default function SearchResult({onAdd, data, index}: SearchResultProps) {
         <Box
             sx={{
             display: 'flex',
-            p: 4,
+            p: 2, // padding
             border: "1px solid gray"
             }}
-            className="fittedBox"
+            className="left-panel-contents"
         >
-            <div style={{ flex: 3}}>
-                <Stack 
+            <div style={{ flex: 5}}>
+                <Stack
                     spacing={1}
                     alignItems="flex-start"
                     justifyContent="space-evenly"

@@ -12,7 +12,7 @@ type ResultsProps = {
 export default function Results({onAdd, searchResults}: ResultsProps) {
 
     return (
-        <div>
+        <div className="left-panel scrolling-contents">
             {
                 searchResults.map((result, i) => (
                     <SearchResult onAdd={onAdd} data={result} index={i} key={i} />
