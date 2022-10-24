@@ -1,7 +1,8 @@
 /**
  * Methods for interpreting, manipulating, and searching stop types
  */
- import { makeApiQueryURLJSON, overrideOptionalDefaults } from "./utils/apiCallUtils";
+ import { RouteOutlined } from "@mui/icons-material";
+import { makeApiQueryURLJSON, overrideOptionalDefaults } from "./utils/apiCallUtils";
 
 const GEOCODING_ENDPOINT = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
 const DEFAULT_OPT_PARAMS = {
@@ -12,7 +13,53 @@ const DEFAULT_OPT_PARAMS = {
 function computeProgressThruRoute(
    progress : number, route : {[key : string] : any} | undefined
 ) {
-   return [-73.990593, 40.740121];
+   if (route) {
+      var totalDuration = 0;
+      for (const leg of route.legs) {
+         totalDuration += leg.duration;
+      }
+      const progressDuration = totalDuration * (progress / 100)
+      console.log("Progress into trip (min):")
+      console.log(progressDuration/60)
+
+      // For simplicity, assume that speed on any stretch of a
+      // step (driving instruction with no turns) is constant
+      var accumulatedDuration = 0;
+      for (const leg of route.legs) {
+         if ((accumulatedDuration + leg.duration) < progressDuration) {
+            accumulatedDuration += leg.duration
+         } else {
+            var start = leg.steps[0].maneuver.location
+            for (const step of leg.steps.slice(1,)) {
+               if ((accumulatedDuration + step.duration) >= progressDuration) {
+                  const end = step.maneuver.location
+                  const frac = (progressDuration - accumulatedDuration) / (step.duration)
+                  const searchLat = start[1] + frac * (end[1] - start[1])
+                  const searchLng = start[0] + frac * (end[0] - start[0])
+                  return [searchLng, searchLat]
+               } else {
+                  accumulatedDuration += step.duration
+                  start = step.maneuver.location
+               }
+            }
+            // we should never end up here logically
+            console.log("IMPOSSIBLE LOCATION 1 REACHED")
+            console.log("progressDuration || accumulatedDuration")
+            console.log(progressDuration)
+            console.log(accumulatedDuration)
+            return start
+         }
+      }
+      // search at the destination, likewise should never end up 
+      // here
+      console.log("IMPOSSIBLE LOCATION 2 REACHED")
+      console.log("progressDuration || accumulatedDuration")
+      console.log(progressDuration)
+      console.log(accumulatedDuration)
+      return route.waypoints.at(-1).location
+   } else {
+      return [-73.990593, 40.740121];
+   }
 }
 
 function sortResultsByTimeAdded(results : {}[]) {
@@ -31,14 +78,16 @@ async function getStops(
    stopType : string, progress : number, route : {[key : string] : any} | undefined
 ) {
    const coordinates = computeProgressThruRoute(progress, route);
+   console.log("COORDINATES!!!")
+   console.log(coordinates)
    const settings = { 
       "proximity" : coordinates[0].toString().concat(",", coordinates[1].toString())
+
    }
    const opt_params = overrideOptionalDefaults(DEFAULT_OPT_PARAMS, settings)
    const query = makeApiQueryURLJSON(
       GEOCODING_ENDPOINT, [stopType], opt_params
    )
-   console.log(query);
    
    const fetchPOIStops = async () : Promise<{[key : string] : any}> => {
       try {

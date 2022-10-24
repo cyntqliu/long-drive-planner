@@ -19,7 +19,6 @@ const AESTHETIC_ADJUSTMENT = 60;
 async function getRouteForDisplay(stops : Array<{ [key : string] : any}>, traffic : boolean = false) {
     // given the stops, extract the necessary information and make an api
     // request to get the route
-    
     let profile : string;
     if (traffic) {
         profile = "driving-traffic";
@@ -32,12 +31,18 @@ async function getRouteForDisplay(stops : Array<{ [key : string] : any}>, traffi
         coordinates += (stop["center"][0].toString() + "," + stop["center"][1].toString() + ";")
     }
     coordinates = coordinates.substring(0, coordinates.length-1);
-    const settings = { "geometries" : "geojson", "steps" : "true" }
+    const settings = { 
+        "geometries" : "geojson", 
+        "steps" : "true",
+        "overview" : "full",
+        "annotations": "duration"
+    }
     const opt_params = overrideOptionalDefaults(DEFAULT_OPT_PARAMS, settings)
 
     const query = makeApiQueryURLJSON(
         DIRECTIONS_ENDPOINT, [profile, coordinates], opt_params, "/"
     )
+    console.log(query);
     const fetchRoute = async (): Promise<{[key: string] : any}> => {
         try {
             const response = await fetch(query)
