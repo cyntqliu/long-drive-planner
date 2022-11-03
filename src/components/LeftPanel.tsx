@@ -27,21 +27,19 @@ type LeftPanelProps = {
     searchResults: {}[]; // current stop search results
     onSearchStop: (stopType: string, percentThrough: number) => void; // handler for searching stops
     routeResponse: { [key: string]: any } | undefined; // json containing route
+    onResultSelect: (index: number) => void;
     page: number; // page of LeftPanel
     goLeft: () => void; // handler for turning LeftPanel left
     goRight: () => void; // handler for turning LeftPanel right
+    selectedResult: number;
 
 }
 
 export default function LeftPanel({ 
     onSearch, onAdd, startQuery, endQuery, searchResults, stops, 
-    onSearchStop, routeResponse, page, goLeft, goRight
+    onSearchStop, routeResponse, onResultSelect, page, goLeft, goRight,
+    selectedResult
 }: LeftPanelProps) {
-    const [selectedResult, setSelectedResult] = useState(1);
-    const onResultSelect = (index: number) => {
-        setSelectedResult(index);
-    }
-
     const getPage = () => {
         if (page == 0) {
             return (
@@ -65,7 +63,11 @@ export default function LeftPanel({
         } else if (page == 1) {
             return (
                 <div className="left-panel">
-                    <Results onAdd={onAdd} searchResults={searchResults} />
+                    <Results 
+                        onAdd={onAdd}
+                        searchResults={searchResults}
+                        onResultSelect={onResultSelect}
+                    />
                     <Button variant="outlined" startIcon={<KeyboardArrowLeftIcon />}
                         onClick={() => {
                             goLeft();
@@ -85,7 +87,11 @@ export default function LeftPanel({
         } else {
             return (
                 <div className="left-panel">
-                    <DetailedResult data={searchResults[selectedResult]} index={selectedResult} />
+                    <DetailedResult
+                        data={searchResults[selectedResult]}
+                        index={selectedResult}
+                        onAdd={onAdd}
+                    />
                     <Button variant="outlined" startIcon={<KeyboardArrowLeftIcon />}
                         onClick={() => {
                             goLeft();

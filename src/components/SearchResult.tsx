@@ -1,8 +1,8 @@
-import { Box, Stack } from '@mui/material';
+import { Box, Button, Stack } from '@mui/material';
 import React, {useState} from 'react';
 import AddButton from './AddButton';
 import '../index.css'
-
+import { FULL_NAME_KEY, PLACE_NAME_KEY } from '../lib/constants'
 /**
  * A single search result in Results
  */
@@ -12,15 +12,12 @@ type SearchResultProps = {
         [key: string]: any
     };
     index: number;
+    onResultSelect: (index: number) => void;
 }
 
-
-const PLACE_NAME_KEY : string = "text";
-const FULL_NAME_KEY : string = "place_name";
-
-export default function SearchResult({onAdd, data, index}: SearchResultProps) {
-    const [placeName, setPlaceName] = useState(data["text"]);
-    const [fullName, setFullName] = useState(data["place_name"])
+export default function SearchResult({onAdd, data, index, onResultSelect}: SearchResultProps) {
+    const [placeName, setPlaceName] = useState(data[PLACE_NAME_KEY]);
+    const [fullName, setFullName] = useState(data[FULL_NAME_KEY])
 
     return (
         <Box
@@ -37,7 +34,7 @@ export default function SearchResult({onAdd, data, index}: SearchResultProps) {
                     alignItems="flex-start"
                     justifyContent="space-evenly"
                 >
-                    <div>{placeName}</div>
+                    <Button onClick={() => onResultSelect(index)}>{placeName}</Button>
                     <div>{fullName}</div>
                 </Stack>
             </div>

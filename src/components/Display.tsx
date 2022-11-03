@@ -28,6 +28,19 @@ export default function Display() {
 
     const initSearchResults : {}[] = [];
     const [searchResults, setSearchResults] = useState(initSearchResults)
+
+    const [selectedResult, setSelectedResult] = useState(-1);
+
+    /**
+     * Populate the details page with detailed information about
+     * the selected search result, and automatically go to that page
+     * 
+     * @param index index of selected search result
+     */
+    const onResultSelect = (index: number) => {
+        setSelectedResult(index)
+        setLeftPanelPage(2) // automatically go to the detailed result
+    }
     
     /**
      * Add a searched stop to stops
@@ -54,6 +67,7 @@ export default function Display() {
         setRouteResponse(routeData.routes[0])
         setSearchResults(initSearchResults) // clear the search results
         setLeftPanelPage(0) // automatically turn back to directions and route
+        setSelectedResult(-1) // reset the detailed result so we cannot access it
     }
 
     /**
@@ -158,9 +172,11 @@ export default function Display() {
                 stops={stops}
                 onSearchStop={onSearchStop}
                 routeResponse={routeResponse}
+                onResultSelect={onResultSelect}
                 page={leftPanelPage}
                 goLeft={goLeft}
                 goRight={goRight}
+                selectedResult={selectedResult}
             />
             <MapDisplay 
                 stops={stops}

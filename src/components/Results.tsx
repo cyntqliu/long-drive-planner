@@ -7,15 +7,21 @@ import SearchResult from './SearchResult';
 type ResultsProps = {
     onAdd: (index: number, percent: number) => void;
     searchResults: {}[];
+    onResultSelect: (index: number) => void;
 }
 
-export default function Results({onAdd, searchResults}: ResultsProps) {
+export default function Results({onAdd, searchResults, onResultSelect}: ResultsProps) {
 
     return (
         <div className="left-panel scrolling-contents">
             {
                 searchResults.map((result, i) => (
-                    <SearchResult onAdd={onAdd} data={result} index={i} key={i} />
+                    <SearchResult
+                        onAdd={onAdd}
+                        data={result}
+                        index={i}
+                        onResultSelect={onResultSelect}
+                    />
                 ))
             }
         </div> // todo
