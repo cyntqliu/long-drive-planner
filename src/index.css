@@ -36,8 +36,14 @@
     flex: 1;
     display: flex;
     overflow-y: scroll;
-    height: auto;
+    height: 60%;
     width: auto;
+    top: 20%;
+    left: 20%;
+    position: absolute;
+    background-color: aliceblue;
+    padding: 2%;
+    border-radius: 2%;
 }
 
 .directions {
