@@ -24,6 +24,6 @@ export default function Results({onAdd, searchResults, onResultSelect}: ResultsP
                     />
                 ))
             }
-        </div> // todo
+        </div>
     )
 }

@@ -71,6 +71,15 @@ export default function Display() {
     }
 
     /**
+     * Remove a searched stop from stops
+     */
+    const onRemoveStop = async (index: number) => {
+        // Update list of stops when a stop is removed
+        const selectedResult = searchResults[index + 1];
+        console.log("heg") // TODO next time
+    }
+
+    /**
      * Stop search function. Sets search results to query results
      * 
      * @param stopType - type of stop requested (e.g. food, hotel)
@@ -154,6 +163,9 @@ export default function Display() {
         setLeftPanelPage(leftPanelPage + 1);
     }
 
+    /**
+     * Return the actual component
+     */
     return (
         <Box
             sx={{
@@ -171,6 +183,7 @@ export default function Display() {
                 searchResults={searchResults}
                 stops={stops}
                 onSearchStop={onSearchStop}
+                onRemoveStop={onRemoveStop}
                 routeResponse={routeResponse}
                 onResultSelect={onResultSelect}
                 page={leftPanelPage}

@@ -26,6 +26,7 @@ type LeftPanelProps = {
     stops: {}[]; // current stops in route
     searchResults: {}[]; // current stop search results
     onSearchStop: (stopType: string, percentThrough: number) => void; // handler for searching stops
+    onRemoveStop: (index: number) => void;
     routeResponse: { [key: string]: any } | undefined; // json containing route
     onResultSelect: (index: number) => void;
     page: number; // page of LeftPanel
@@ -37,7 +38,7 @@ type LeftPanelProps = {
 
 export default function LeftPanel({ 
     onSearch, onAdd, startQuery, endQuery, searchResults, stops, 
-    onSearchStop, routeResponse, onResultSelect, page, goLeft, goRight,
+    onSearchStop, onRemoveStop, routeResponse, onResultSelect, page, goLeft, goRight,
     selectedResult
 }: LeftPanelProps) {
     const getPage = () => {
@@ -50,6 +51,7 @@ export default function LeftPanel({
                         endQuery={endQuery}
                         onSearch={onSearch}
                         onSearchStop={onSearchStop}
+                        onRemoveStop={onRemoveStop}
                         routeResponse={routeResponse}
                     />
                     <Button variant="outlined" endIcon={<KeyboardArrowRightIcon />}

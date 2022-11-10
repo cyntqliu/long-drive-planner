@@ -15,6 +15,11 @@
     width: 100%;
 }
 
+.stop-on-page-zero {
+    height: auto;
+    width: auto;
+}
+
 .scrolling-contents {
     overflow-y: scroll;
 }
