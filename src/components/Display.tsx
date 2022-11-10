@@ -26,7 +26,7 @@ export default function Display() {
 
     const [routeResponse, setRouteResponse] = useState<{[key : string] : any} | undefined>(undefined);
 
-    const initSearchResults : {}[] = [];
+    const initSearchResults : { [key: string]: any }[] = [];
     const [searchResults, setSearchResults] = useState(initSearchResults)
 
     const [selectedResult, setSelectedResult] = useState(-1);
@@ -89,8 +89,10 @@ export default function Display() {
         // Conduct a stop search and update all the search results
         const response = await getStops(stopType, percentThrough, routeResponse);
         // manually set the percent
-        response["percent"] = percentThrough;
         const bestStops = sortResultsByTimeAdded(response.features)
+        for (const stop of bestStops) {
+            stop["percent"] = percentThrough;
+        }
         setSearchResults(bestStops)
         setLeftPanelPage(1) // automatically switch to the search results
     }

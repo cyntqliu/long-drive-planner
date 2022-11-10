@@ -62,7 +62,7 @@ function computeProgressThruRoute(
    }
 }
 
-function sortResultsByTimeAdded(results : {}[]) {
+function sortResultsByTimeAdded(results : {[key: string]: any}[]) {
    return results;
 }
 
