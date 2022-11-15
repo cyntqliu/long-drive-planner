@@ -13,7 +13,6 @@ type StopOnRouteProps = {
 }
 
 export default function StopOnRoute({data, index, onRemove}: StopOnRouteProps) {
-    console.log(data)
     const [placeName, setPlaceName] = useState(data[PLACE_NAME_KEY]);
 
     return (
@@ -29,7 +28,7 @@ export default function StopOnRoute({data, index, onRemove}: StopOnRouteProps) {
             className="stop-on-page-zero"
         >
             <div style={{ flex: 4}}>{placeName}</div>
-            <div style={{ flex: 1}}>{data["percent"]}</div>
+            <div style={{ flex: 1}}>{data["percent"]}%</div>
             <IconButton
                 aria-label="remove stop"
                 onClick={() => onRemove(index)}

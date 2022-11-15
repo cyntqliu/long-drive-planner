@@ -12,17 +12,17 @@ import { sortedIndex } from '../lib/utils/localUtils';
  * The full display, including search/results/detailed results on the LeftPanel, and map widget on the right
  */
 export default function Display() {
-    const [hasStart, setHasStart] = useState(false);
-    const [hasEnd, setHasEnd] = useState(false);
-    const [startQuery, setStartQuery] = useState("");
-    const [endQuery, setEndQuery] = useState("");
-    const [leftPanelPage, setLeftPanelPage] = useState(0);
+    const [hasStart, setHasStart] = useState(false); // whether our path currently has a start
+    const [hasEnd, setHasEnd] = useState(false); // whether our path currently has a destination
+    const [startQuery, setStartQuery] = useState(""); // query text for start
+    const [endQuery, setEndQuery] = useState(""); // query text for destination
+    const [leftPanelPage, setLeftPanelPage] = useState(0); // page of the left panel
 
     const initialStops : {}[] = [];
-    const [stops, setStops] = useState(initialStops);
+    const [stops, setStops] = useState(initialStops); // all stops, including start and dest, on route
 
     const initialStopPercents : number[] = [];
-    const [stopPercents, setStopPercents] = useState(initialStopPercents)
+    const [stopPercents, setStopPercents] = useState(initialStopPercents) // ordered percents for non-start/end stops
 
     const [routeResponse, setRouteResponse] = useState<{[key : string] : any} | undefined>(undefined);
 
@@ -59,8 +59,8 @@ export default function Display() {
         const newStopPercents = stopPercents.slice(0, insertIndex).concat(percent);
         setStopPercents(newStopPercents.concat(stopPercents.slice(insertIndex)));
 
-        const allButDest = stops.slice(0,insertIndex).concat([selectedResult]);
-        const newStops = allButDest.concat(stops.slice(insertIndex));
+        const firstHalf = stops.slice(0,insertIndex).concat([selectedResult]);
+        const newStops = firstHalf.concat(stops.slice(insertIndex));
         setStops(newStops);
 
         const routeData = await getRouteForDisplay(newStops)
@@ -75,8 +75,16 @@ export default function Display() {
      */
     const onRemoveStop = async (index: number) => {
         // Update list of stops when a stop is removed
-        const selectedResult = searchResults[index + 1];
-        console.log("heg") // TODO next time
+        const newStops = stops.slice(0,index+1).concat(stops.slice(index+2));
+        const newStopPercents = stopPercents.slice(0,index).concat(
+            stopPercents.slice(index+1)
+        )
+        const routeData = await getRouteForDisplay(newStops)
+        
+        setRouteResponse(routeData.routes[0])
+        setLeftPanelPage(0) // not necessary now, but may be necessary in the future
+        setStopPercents(newStopPercents)
+        setStops(newStops)
     }
 
     /**
