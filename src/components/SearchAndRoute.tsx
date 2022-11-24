@@ -4,6 +4,7 @@ import AddressBar from './AddressBar';
 import SearchStop from './SearchStop';
 import Directions from './Directions';
 import StopOnRoute from './StopOnRoute';
+import { buildGMapsURL } from '../lib/utils/localUtils';
 import '../index.css'
 
 /** 
@@ -16,11 +17,11 @@ type SearchAndRouteProps = {
     onSearch: (query : string, label : string) => void;
     onSearchStop: (stopType : string, percentThrough : number) => void;
     onRemoveStop: (index: number) => void;
-    routeResponse: {[key : string] : any} | undefined
+    routeResponse: {[key : string] : any} | undefined;
 }
 
 export default function SearchAndRoute({
-    stops, startQuery, endQuery, onSearch, onSearchStop, onRemoveStop, routeResponse
+    stops, startQuery, endQuery, onSearch, onSearchStop, onRemoveStop, routeResponse,
 }: SearchAndRouteProps) {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
@@ -52,7 +53,9 @@ export default function SearchAndRoute({
                 open={open}
                 onClose={handleClose}
             >
-                <Directions routeResponse={routeResponse} />
+                <Directions routeResponse={routeResponse} onExport=
+                    {() => window.open(buildGMapsURL(stops), '_blank')} 
+                />
             </Modal>
         </Stack>
     )

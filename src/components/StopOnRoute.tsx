@@ -1,7 +1,7 @@
 import { Box, IconButton } from '@mui/material';
 import CancelIcon from '@mui/icons-material/Cancel';
 import React, {useState} from 'react';
-import { PLACE_NAME_KEY } from '../lib/constants'
+import { PLACE_NAME_KEY } from '../lib/utils/constants'
 
 /**
  * Page displaying detailed information about a selected result, in the left panel (page 2)

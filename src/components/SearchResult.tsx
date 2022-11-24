@@ -2,7 +2,7 @@ import { Box, Button, Stack } from '@mui/material';
 import React, {useState} from 'react';
 import AddButton from './AddButton';
 import '../index.css'
-import { FULL_NAME_KEY, PLACE_NAME_KEY } from '../lib/constants'
+import { FULL_NAME_KEY, PLACE_NAME_KEY } from '../lib/utils/constants'
 /**
  * A single search result in Results
  */

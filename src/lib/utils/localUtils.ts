@@ -2,6 +2,7 @@
  * Module of all miscellaneous utility functions that do not
  * center around API calls
  */
+import { FULL_NAME_KEY } from './constants';
 
 // taken directly from https://stackoverflow.com/questions/1344500/efficient-way-to-insert-a-number-into-a-sorted-array-of-numbers
 function sortedIndex(array: number[], value: number) {
@@ -16,4 +17,18 @@ function sortedIndex(array: number[], value: number) {
     return low;
 }
 
-export {sortedIndex};
+
+function buildGMapsURL(stops: { [key: string] : any }[]) {
+    var baseURL : string = "https://www.google.com/maps/dir/";
+    const whiteSpace = /\s/g;
+    for (const stop of stops) {
+        // format the address of the stop correctly for the url
+        const address = stop[FULL_NAME_KEY];
+        const urlAddress = address.replaceAll(whiteSpace, "+");
+        baseURL = baseURL.concat(urlAddress).concat("/");
+    }
+
+    return baseURL;
+}
+
+export {buildGMapsURL, sortedIndex};

@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
 import React, {useState} from 'react';
-import { FULL_NAME_KEY, PLACE_NAME_KEY } from '../lib/constants'
+import { FULL_NAME_KEY, PLACE_NAME_KEY } from '../lib/utils/constants'
 
 /**
  * Page displaying detailed information about a selected result, in the left panel (page 2)

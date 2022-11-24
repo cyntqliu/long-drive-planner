@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import { convertToObject } from 'typescript';
+import { Button, Stack } from '@mui/material';
 import '../index.css'
 
 /** 
@@ -7,9 +8,10 @@ import '../index.css'
 */
 type DirectionsProps = {
     routeResponse: {[key : string] : any} | undefined;
+    onExport: () => void;
 }
 
-export default function Directions({routeResponse} : DirectionsProps) {
+export default function Directions({routeResponse, onExport} : DirectionsProps) {
     const extractDirections = () => {
         if (routeResponse) {
             const legs : {[key : string] : any}[] = routeResponse.legs // list of dicts with "steps"
@@ -29,8 +31,17 @@ export default function Directions({routeResponse} : DirectionsProps) {
     }
 
     return (
-        <div className="directions-container">
+        <Stack
+            spacing={1}
+            className="directions-container"
+        >
             {extractDirections()}
-        </div>
+            <Button 
+                variant="contained"
+                onClick={onExport}
+            >
+                View in Google Maps
+            </Button>
+        </Stack>
     )
 }
