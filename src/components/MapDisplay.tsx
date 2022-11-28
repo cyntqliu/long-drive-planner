@@ -131,9 +131,6 @@ export default function MapDisplay({stops, routeResponse, searchResults} : MapDi
             if (map.current!.getLayer(ROUTE_ID)) {
                 map.current!.removeLayer(ROUTE_ID);
             }
-            if (map.current!.getSource(ROUTE_ID)) {
-                map.current!.removeSource(ROUTE_ID);
-            }
             
             if (stops.length == 1) {
                 const route = [markerData.features[0].geometry.coordinates];
@@ -154,11 +151,16 @@ export default function MapDisplay({stops, routeResponse, searchResults} : MapDi
         const newSearchMarkers : mapboxgl.Marker[] = [];
         const newStopLngLat : Array<Array<number>> = [];
         for (const m of stopMarkerData.features) {
+            // define popup content
+            const popupString = "<div>".concat(m.properties.name).concat("</div>")
             newSearchMarkers.push( // adding markers on top (default mapboxgl js)
                 new mapboxgl.Marker({
                     color: stopMarkerColor,
                 }).setLngLat(m.geometry.coordinates)
                 .addTo(map.current!)
+                .setPopup(new mapboxgl.Popup({
+                    closeButton: false
+                }).setHTML(popupString))
             )
             newStopLngLat.push(m.geometry.coordinates)
         }

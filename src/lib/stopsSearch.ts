@@ -78,8 +78,6 @@ async function getStops(
    stopType : string, progress : number, route : {[key : string] : any} | undefined
 ) {
    const coordinates = computeProgressThruRoute(progress, route);
-   console.log("COORDINATES!!!")
-   console.log(coordinates)
    const settings = { 
       "proximity" : coordinates[0].toString().concat(",", coordinates[1].toString())
 
