@@ -1,11 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
+// import ReactMapGL from 'react-map-gl';
 import mapboxgl from 'mapbox-gl';
 import { convertStopsToMarker, getMapZoomCenter, MAXZOOM } from '../lib/mapDisplay';
 import '../index.css';
 
-
 mapboxgl.accessToken = process.env.REACT_APP_API_KEY !== undefined ? process.env.REACT_APP_API_KEY : '';
+// @ts-ignore
+// eslint-disable @typescript-eslint/no-var-requires
+mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
 
 type MapDisplayProps = {
     stops: {}[];
