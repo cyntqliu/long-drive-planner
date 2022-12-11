@@ -1,14 +1,10 @@
 /**
  * Methods for interpreting, manipulating, and searching stop types
  */
- import { RouteOutlined } from "@mui/icons-material";
+import { RouteOutlined } from "@mui/icons-material";
 import { makeApiQueryURLJSON, overrideOptionalDefaults } from "./utils/apiCallUtils";
 
-const GEOCODING_ENDPOINT = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
-const DEFAULT_OPT_PARAMS = {
-   "access_token": process.env.REACT_APP_API_KEY !== undefined ? process.env.REACT_APP_API_KEY : '',
-   "type" : "poi",
-}
+const GEOCODING_ENDPOINT = "/stops/";
 
 function computeProgressThruRoute(
    progress : number, route : {[key : string] : any} | undefined
@@ -63,6 +59,7 @@ function computeProgressThruRoute(
 }
 
 function sortResultsByTimeAdded(results : {[key: string]: any}[]) {
+   // TODO
    return results;
 }
 
@@ -82,9 +79,8 @@ async function getStops(
       "proximity" : coordinates[0].toString().concat(",", coordinates[1].toString())
 
    }
-   const opt_params = overrideOptionalDefaults(DEFAULT_OPT_PARAMS, settings)
    const query = makeApiQueryURLJSON(
-      GEOCODING_ENDPOINT, [stopType], opt_params
+      GEOCODING_ENDPOINT, [stopType], settings
    )
    
    const fetchPOIStops = async () : Promise<{[key : string] : any}> => {

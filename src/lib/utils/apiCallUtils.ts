@@ -1,3 +1,15 @@
+function removejson(query : string) {
+    // optionally remove .json from the ending of an element
+    const length = query.length
+    if (length <= 5) {
+        return query
+    }
+    if (query.substring(length-5) == ".json") {
+        return query.substring(0, length-5)
+    }
+    return query
+}
+
 function makeApiQueryURLJSON(
     endpoint : string, reqParams : string[], optParams : {[key: string] : string}, reqSeparator? : string
 ) {
@@ -21,7 +33,10 @@ function makeApiQueryURLJSON(
 
     const urlSafeReqParams : string[] = [];
     reqParams.forEach(
-        (element) => urlSafeReqParams.push(encodeURIComponent(element))
+        (element) => {
+            const jsonless_element = removejson(element)
+            urlSafeReqParams.push(encodeURIComponent(jsonless_element))
+        }
     )
 
     let reqParamsStr;
