@@ -3,10 +3,7 @@
  */
  import { makeApiQueryURLJSON, overrideOptionalDefaults } from "./utils/apiCallUtils";
 
- const DIRECTIONS_ENDPOINT = "https://api.mapbox.com/directions/v5/mapbox/";
- const DEFAULT_OPT_PARAMS = {
-    "access_token": process.env.REACT_APP_API_KEY !== undefined ? process.env.REACT_APP_API_KEY : '',
-}
+const DIRECTIONS_ENDPOINT = "/route/";
 const MAXZOOM = 17;
 const AESTHETIC_ADJUSTMENT = 60;
 
@@ -37,12 +34,10 @@ async function getRouteForDisplay(stops : Array<{ [key : string] : any}>, traffi
         "overview" : "full",
         "annotations": "duration"
     }
-    const opt_params = overrideOptionalDefaults(DEFAULT_OPT_PARAMS, settings)
 
     const query = makeApiQueryURLJSON(
-        DIRECTIONS_ENDPOINT, [profile, coordinates], opt_params, "/"
+        DIRECTIONS_ENDPOINT, [profile, coordinates], settings, "/"
     )
-    console.log(query);
     const fetchRoute = async (): Promise<{[key: string] : any}> => {
         try {
             const response = await fetch(query)

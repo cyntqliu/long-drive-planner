@@ -22,8 +22,10 @@
     "typescript": "latest",
     "worker-loader": "^3.0.8"
   },
+  "main": "server/server.ts",
   "scripts": {
-    "start": "react-scripts start",
+    "hotloader": "react-scripts start",
+    "start": "nodemon server/server.ts",
     "build": "react-scripts build",
     "test": "jest",
     "eject": "react-scripts eject"
