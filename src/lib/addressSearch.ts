@@ -3,10 +3,7 @@
  */
 import { makeApiQueryURLJSON, overrideOptionalDefaults } from "./utils/apiCallUtils";
 
-const GEOCODING_ENDPOINT = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
-const DEFAULT_OPT_PARAMS = {
-    "access_token": process.env.REACT_APP_API_KEY !== undefined ? process.env.REACT_APP_API_KEY : '',
-}
+const GEOCODING_ENDPOINT = "/address/";
 
 function suggestAddresses(query : string) {
     // given an unsubmitted search query, return a list of
@@ -17,7 +14,7 @@ function suggestAddresses(query : string) {
 async function getEncodedAddress(searchAddress : string, optParams : { [key: string] : any} = {}) {
     // given an address, return the forward geoencoding of said address
     const query = makeApiQueryURLJSON(
-        GEOCODING_ENDPOINT, [searchAddress], DEFAULT_OPT_PARAMS,
+        GEOCODING_ENDPOINT, [searchAddress], {},
     )
     const fetchCoordinates = async (): Promise<{[key: string] : any}> => {
         try {

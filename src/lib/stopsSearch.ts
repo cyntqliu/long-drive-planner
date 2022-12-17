@@ -1,8 +1,7 @@
 /**
  * Methods for interpreting, manipulating, and searching stop types
  */
-import { RouteOutlined } from "@mui/icons-material";
-import { makeApiQueryURLJSON, overrideOptionalDefaults } from "./utils/apiCallUtils";
+import { makeApiQueryURLJSON } from "./utils/apiCallUtils";
 
 const GEOCODING_ENDPOINT = "/stops/";
 

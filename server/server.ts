@@ -7,15 +7,19 @@ import { makeApiQueryURLJSON, overrideOptionalDefaults } from "../src/lib/utils/
 
 const app = express()
 const PORT = 8080;
+const accessToken = process.env.REACT_APP_API_KEY !== undefined ? process.env.REACT_APP_API_KEY : ''
 
 const PLACES_ENDPOINT = "https://api.mapbox.com/geocoding/v5/mapbox.places/"
 const PLACES_OPT_PARAMS = {
-    "access_token": process.env.REACT_APP_API_KEY !== undefined ? process.env.REACT_APP_API_KEY : '',
+    "access_token": accessToken,
     "type" : "poi",
 }
 const DIRECTIONS_ENDPOINT = "https://api.mapbox.com/directions/v5/mapbox/";
 const DIRECTIONS_OPT_PARAMS = {
-    "access_token": process.env.REACT_APP_API_KEY !== undefined ? process.env.REACT_APP_API_KEY : '',
+    "access_token": accessToken
+}
+const ADDRESS_OPT_PARAMS = {
+    "access_token": accessToken
 }
 
 // load the compiled react files, which will serve /index.html
@@ -28,6 +32,32 @@ app.get("/", (req, res) => {
 });
 
 // get endpoint address (start or end)
+app.get("/address/:searchAddress", async (req, res, next) => {
+    try {
+        const searchAddress = req.params.searchAddress
+        const query = makeApiQueryURLJSON(
+            PLACES_ENDPOINT, [searchAddress], ADDRESS_OPT_PARAMS,
+        )
+        console.log(query)
+    
+        const fetchCoordinates = async (): Promise<{[key: string] : any}> => {
+            try {
+                const response = await fetch(query)
+                const data = await response.json()
+                return data;
+            } catch (error: any) {
+                return {
+                    "message": error.message,
+                }
+            }
+        }
+        const response = await fetchCoordinates();
+        res.json(response);
+    } catch (error) {
+        next(error);
+    }
+    
+})
 
 // search stops
 app.get("/stops/:stoptype", async (req, res, next) => {
