@@ -6,7 +6,7 @@ dotenv.config()
 import { makeApiQueryURLJSON, overrideOptionalDefaults } from "../src/lib/utils/apiCallUtils";
 
 const app = express()
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 const accessToken = process.env.REACT_APP_API_KEY !== undefined ? process.env.REACT_APP_API_KEY : ''
 
 const PLACES_ENDPOINT = "https://api.mapbox.com/geocoding/v5/mapbox.places/"
