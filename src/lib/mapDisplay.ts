@@ -5,7 +5,7 @@
 
 const DIRECTIONS_ENDPOINT = "/route/";
 const MAXZOOM = 17;
-const AESTHETIC_ADJUSTMENT = 60;
+const AESTHETIC_ADJUSTMENT = -20;
 
 /**
  * 
@@ -86,12 +86,20 @@ function convertStopsToMarker(stops : Array<{ [key : string] : any}>) {
  * @param route - list of [long, lat] pairs representing the path
  * @param searchedStops - list of [long, lat] pairs representing any
  *  searchr results
+ * @param viewSearchedOnly - boolean representing whether we only
+ *  want to display searched stop results instead of the entire route
  * @returns [float, float, float] - [zoom, longitude, latitude]
  */
 function getMapZoomCenter(
-    route : Array<Array<number>>, searchedStops : Array<Array<number>>
+    route : Array<Array<number>>,
+    searchedStops : Array<Array<number>>,
+    viewSearchedOnly : boolean = false,
 ) {
-    const allMarkers = route.concat(searchedStops)
+    let allMarkers = route.concat(searchedStops)
+    if (viewSearchedOnly && searchedStops.length > 0) {
+        allMarkers = searchedStops; // do not consider fixed parts of route
+    }
+    
     if (allMarkers.length == 0) {
         return [-1, 0, 0]
     }
@@ -118,19 +126,24 @@ function getMapZoomCenter(
         }
         const eastWest = Math.min(maxEast - maxWest, (180-maxEast) + (180+maxWest));
         const northSouth = maxNorth - maxSouth;
-        const maxDistance = Math.max(eastWest, northSouth)
+        // 180 degrees for eastWest is zoom level 1
+        // 180 degrees for northSouth is zoom level 0
+        const maxDistance = Math.max(0.5 * eastWest, northSouth)
         console.log(maxDistance);
 
+        let zoom; let lngCenter; let latCenter
         if (maxDistance > 0) {
-            const zoom = Math.min(MAXZOOM, Math.log2(
-                (180 + AESTHETIC_ADJUSTMENT)/maxDistance)
-            );
-            const lngCenter = (maxEast + maxWest) / 2;
-            const latCenter = (maxNorth + maxSouth) / 2;
-            return [zoom, lngCenter, latCenter]
-        } else {
-            return [MAXZOOM, maxEast, maxNorth];
+            zoom = Math.min(MAXZOOM, Math.max(
+                0.0, Math.log2((180 + AESTHETIC_ADJUSTMENT)/maxDistance)
+            ));
+            lngCenter = (maxEast + maxWest) / 2;
+            latCenter = (maxNorth + maxSouth) / 2;
+        } else { // one thing on map
+            zoom = MAXZOOM;
+            lngCenter = maxEast;
+            latCenter = maxNorth;;
         }
+        return [zoom, lngCenter, latCenter]
     }
 }
 

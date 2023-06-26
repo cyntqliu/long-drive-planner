@@ -4,8 +4,9 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import mapboxgl from 'mapbox-gl';
 import { convertStopsToMarker, getMapZoomCenter, MAXZOOM } from '../lib/mapDisplay';
 import '../index.css';
+import { ZoomControl } from '../lib/zoomControl';
 
-mapboxgl.accessToken = process.env.REACT_APP_API_KEY !== undefined ? process.env.REACT_APP_API_KEY : '';
+mapboxgl.accessToken = "pk.eyJ1IjoiY3lubGl1OTgiLCJhIjoiY2wzMmJkMWx1MDNlNzNjcDg2dnN5Znl6NCJ9.LESBcw3KSk04fgxXhzpT8Q";
 // @ts-ignore
 // eslint-disable @typescript-eslint/no-var-requires
 mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
@@ -27,9 +28,10 @@ const stopMarkerColor = "#F09F63";
 export default function MapDisplay({stops, routeResponse, searchResults} : MapDisplayProps) {
     const mapContainer = React.useRef(null);
     const map = React.useRef<null|mapboxgl.Map>(null);
-    const [lng, setLng] = useState(-70.9);
-    const [lat, setLat] = useState(42.35);
-    const [zoom, setZoom] = useState(9);
+    const [viewSearchedOnly, setViewSearchedOnly] = useState(false);
+    const [lng, setLng] = useState(-70.9); // need this for click-and-drag map interaction
+    const [lat, setLat] = useState(42.35); // need this for click-and-drag map interaction
+    const [zoom, setZoom] = useState(9); // need this for scrolling map interaction
     
     // actual route markers
     const initialRouteMarkers : mapboxgl.Marker[] = [];
@@ -45,6 +47,17 @@ export default function MapDisplay({stops, routeResponse, searchResults} : MapDi
     const initStopLngLats : Array<Array<number>> = [];
     const [stopLngLats, setStopLngLats] = useState(initStopLngLats);
 
+    // initialize custom navigation control
+    const options = {
+        onClick: () => {
+            console.log("entered onClick!") // not printing, even though we are repeatedly initializing
+            if (routeResponse) { // only change the display if there is a route
+                setViewSearchedOnly(!viewSearchedOnly); // set to opposite
+            }
+        }
+    };
+    const nav = new ZoomControl(options);
+
     useEffect(() => { // only load the map when the container is ready
         if (map.current) return; // initialize map only once
         map.current = new mapboxgl.Map({
@@ -53,8 +66,9 @@ export default function MapDisplay({stops, routeResponse, searchResults} : MapDi
             center: [lng, lat],
             zoom: zoom
         });
+        map.current.addControl(nav, 'top-right');
     });
-
+    
     // =========================== user interaction with map
     useEffect(() => {
         if (!map.current) return; // wait for map to initialize
@@ -86,7 +100,9 @@ export default function MapDisplay({stops, routeResponse, searchResults} : MapDi
         // ====================== display the route route
         if (routeResponse && (stops.length >= 2)) {
             const route = routeResponse.geometry.coordinates;
-            const [ newZoom, newLng, newLat ] = getMapZoomCenter(route, stopLngLats)
+            const [ newZoom, newLng, newLat ] = getMapZoomCenter(
+                route, stopLngLats, viewSearchedOnly
+            )
             if (newZoom > 0) {
                 setZoom(newZoom); setLng(newLng); setLat(newLat)
                 map.current!.setZoom(newZoom);
@@ -168,7 +184,10 @@ export default function MapDisplay({stops, routeResponse, searchResults} : MapDi
             newStopLngLat.push(m.geometry.coordinates)
         }
         // ======================= set the zoom
-        const [ newZoom, newLng, newLat ] = getMapZoomCenter(routeLngLats, newStopLngLat)
+        const [ newZoom, newLng, newLat ] = getMapZoomCenter(
+            routeLngLats, newStopLngLat, viewSearchedOnly
+        )
+        setZoom(newZoom); setLng(newLng); setLat(newLat)
         map.current!.setZoom(newZoom);
         map.current!.setCenter([newLng, newLat]);
         setStopLngLats(newStopLngLat);

@@ -7,7 +7,7 @@ import { makeApiQueryURLJSON, overrideOptionalDefaults } from "../src/lib/utils/
 
 const app = express()
 const PORT = process.env.PORT || 8080;
-const accessToken = process.env.REACT_APP_API_KEY !== undefined ? process.env.REACT_APP_API_KEY : ''
+const accessToken = 'pk.eyJ1IjoiY3lubGl1OTgiLCJhIjoiY2wzMmJkMWx1MDNlNzNjcDg2dnN5Znl6NCJ9.LESBcw3KSk04fgxXhzpT8Q';
 
 const PLACES_ENDPOINT = "https://api.mapbox.com/geocoding/v5/mapbox.places/"
 const PLACES_OPT_PARAMS = {
